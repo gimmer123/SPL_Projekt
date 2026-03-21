@@ -1,51 +1,50 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GMDCore;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using SPL2.States.GameStates;
 
 namespace SPL2;
 
-public class Game1 : Game
+public class Game1 : Core
 {
-    private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
+    public const int VIRTUAL_WIDTH = 256;
+    public const int VIRTUAL_HEIGHT = 144;
+    public new Matrix ScreenScaleMatrix => base.ScreenScaleMatrix;
+    private GameStateBase _currentState;
 
-    public Game1()
+    public Game1(): base("SPL2 Projekt", 1280, 720, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
     {
-        _graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
-        IsMouseVisible = true;
+        
     }
 
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
-
         base.Initialize();
+        SetState(new PlayState(this));
     }
 
     protected override void LoadContent()
     {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-        // TODO: use this.Content to load your game content here
     }
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
-
-        // TODO: Add your update logic here
-
+        _currentState.Update(gameTime);
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
-
-        // TODO: Add your drawing code here
+        _currentState.Draw(SpriteBatch);
 
         base.Draw(gameTime);
+    }
+
+    public void SetState(GameStateBase newState)
+    {
+        _currentState?.Exit();
+        _currentState = newState;
+        _currentState.Enter();
     }
 }
