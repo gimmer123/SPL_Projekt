@@ -2,6 +2,14 @@
 <TextureAtlas>
   <Texture>Images/atlas</Texture>
   <Regions>
-    <Region name="snake" x="0" y="0" width="20" height="20" />
+    <!-- Region that covers all four terrain tiles (2x2 tiles of 16x16) -->
+    <Region name="floor-tiles" x="0" y="0" width="32" height="32" />
+
+    <Region name="grass" x="0" y="0" width="16" height="16" />
+	  <Region name="dirt" x="16" y="0" width="16" height="16" />
+	  <Region name="sand" x="0" y="16" width="16" height="16" />
+	  <Region name="path" x="16" y="16" width="16" height="16" />
+
+    <Region name="snake" x="32" y="0" width="16" height="16" />
   </Regions>
 </TextureAtlas>
