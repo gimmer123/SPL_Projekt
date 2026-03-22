@@ -11,7 +11,7 @@ public class MoveDownCommand : ICommand
     public void Execute(IEntity entity, GameTime gameTime, PlayState playState)
     {
         float newPositionY = entity.Position.Y + entity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        if (newPositionY > MAX_Y)
+        if (newPositionY > MAX_Y && entity.GetType() == typeof(Player))
         {
             float overflow = newPositionY - MAX_Y;
             newPositionY = MAX_Y;

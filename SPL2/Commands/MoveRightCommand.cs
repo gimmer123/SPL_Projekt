@@ -12,7 +12,7 @@ public class MoveRightCommand : ICommand
     public void Execute(IEntity entity, GameTime gameTime, PlayState playState)
     {
         float newPositionX = entity.Position.X + entity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        if (newPositionX > MAX_X)
+        if (newPositionX > MAX_X && entity.GetType() == typeof(Player))
         {
             float overflow = newPositionX - MAX_X;
             newPositionX = MAX_X;

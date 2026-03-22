@@ -11,7 +11,7 @@ namespace SPL2.Commands;
     public void Execute(IEntity entity, GameTime gameTime, PlayState playState)
     {
         float newPositionX = entity.Position.X - entity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        if (newPositionX < MIN_X)
+        if (newPositionX < MIN_X && entity.GetType() == typeof(Player))
         {
             float overflow = newPositionX - MIN_X;
             newPositionX = MIN_X;
