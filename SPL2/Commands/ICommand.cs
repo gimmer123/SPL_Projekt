@@ -1,9 +1,11 @@
 using System;
 using Microsoft.Xna.Framework;
+using SPL2.Entities;
+using SPL2.States.GameStates;
 
 namespace SPL2.Commands;
 
-interface ICommand
+public interface ICommand
 {
-    void Execute(Player player, GameTime gameTime);
+    void Execute(IEntity entity, GameTime gameTime, PlayState playState);
 }

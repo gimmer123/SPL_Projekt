@@ -1,12 +1,15 @@
 using System;
 using Microsoft.Xna.Framework;
+using SPL2.Entities;
+using SPL2.States.GameStates;
 
 namespace SPL2.Commands;
 
 public class MoveUpCommand : ICommand
 {
-    public void Execute(Player player, GameTime gameTime)
+    public void Execute(IEntity entity, GameTime gameTime, PlayState playState)
     {
-        player.Position.Y -= player.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        float newPositionY = entity.Position.Y - entity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        entity.Position = new(entity.Position.X, newPositionY); 
     }
 }

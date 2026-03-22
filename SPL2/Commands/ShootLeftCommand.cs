@@ -5,11 +5,10 @@ using SPL2.States.GameStates;
 
 namespace SPL2.Commands;
 
-public class MoveDownCommand : ICommand
+public class ShootLeftCommand : ICommand
 {
     public void Execute(IEntity entity, GameTime gameTime, PlayState playState)
     {
-        float newPositionY = entity.Position.Y + entity.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        entity.Position = new(entity.Position.X, newPositionY);
+        playState.PendingAdd.Add(new Projectile(playState.ProjectileSprite, new MoveLeftCommand(), entity, playState, gameTime));
     }
 }
