@@ -64,21 +64,10 @@ public class Floor
         int currentTileY = (int)(Y / Tilemap.TileHeight);
 
         if (DEBUG_PRINTPOS) Console.WriteLine($"Player position: ({X:F2}, {Y:F2})");
-        // TEMP: TERRIBLE INPUT SYSTEM FOR TESTING. redo this to the other input handler with Commands
-
-        // we should base movement off of the player position.
-        // dont run input from here, let the player spawn in the center of the screen and walk around to ~0.75x the edge whereafter the player position locks
-        // and the world moves instead, this way we can have a more natural movement system and not have to worry about the player position being too far from the tilemap center and causing precision issues
-        // although this might be hard to implement with enemy movements? later issues
-
-        if (Core.Input.Keyboard.CurrentState.IsKeyDown(Keys.W)) MoveY(-Speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-        if (Core.Input.Keyboard.CurrentState.IsKeyDown(Keys.S)) MoveY(Speed  * (float)gameTime.ElapsedGameTime.TotalSeconds);
-        if (Core.Input.Keyboard.CurrentState.IsKeyDown(Keys.A)) MoveX(-Speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-        if (Core.Input.Keyboard.CurrentState.IsKeyDown(Keys.D)) MoveX(Speed  * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
         if (lastTileX == currentTileX && lastTileY == currentTileY)
         {
-            return; // still in the same tile, no need to update
+            return; // still in the same tile, no need to redraw
         }
         lastTileX = currentTileX;
         lastTileY = currentTileY;

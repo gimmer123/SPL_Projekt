@@ -15,7 +15,7 @@ namespace SPL2.States.GameStates;
 public class PlayState(Game1 game) : GameStateBase(game)
 {
     private Player _player;
-    private Floor _floor;
+    public Floor Floor;
     public List<IEntity> Entities = new();
     public List<IEntity> PendingAdd= new();
 
@@ -32,7 +32,7 @@ public class PlayState(Game1 game) : GameStateBase(game)
 
         int columns = Game1.VIRTUAL_WIDTH / floorTileset.TileWidth;
         int rows = Game1.VIRTUAL_HEIGHT / floorTileset.TileHeight;
-        _floor = new Floor(floorTileset, columns, rows);
+        Floor = new Floor(floorTileset, columns, rows);
 
         Sprite playerSprite = atlas.CreateSprite("snake");
         ProjectileSprite = playerSprite;
@@ -49,15 +49,12 @@ public class PlayState(Game1 game) : GameStateBase(game)
         PendingAdd.Clear();
         Entities.ForEach(entity => entity.Update(gameTime));
         Entities.RemoveAll(entity => entity.Remove);
-    
-        
-        _floor.Update(gameTime); // change this later, we dont need to update this globally just when the player is outside thresholds
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Begin(transformMatrix: Game.ScreenScaleMatrix, samplerState: SamplerState.PointClamp);
-        _floor.Tilemap.Draw(spriteBatch);
+        Floor.Tilemap.Draw(spriteBatch);
         Entities.ForEach (entity => entity.Draw(spriteBatch));
         spriteBatch.End();
     }
