@@ -73,8 +73,8 @@ public class Floor
         Tilemap = new Tilemap(tileset, TileWidthCount, TileHeightCount);
 
         // temp offset to avoid jittering around 0/0 will find a proper fix later
-        X = 100000;
-        Y = 100000;
+        X = 0;
+        Y = 0;
 
         _targetX = X;
         _targetY = Y;
@@ -103,8 +103,8 @@ public class Floor
 
         OnMove?.Invoke(X - oldX, Y - oldY);
 
-        int currentTileX = (int)(X / Tilemap.TileWidth);
-        int currentTileY = (int)(Y / Tilemap.TileHeight);
+        int currentTileX = (int)Math.Floor(X / Tilemap.TileWidth);
+        int currentTileY = (int)Math.Floor(Y / Tilemap.TileHeight);
 
         if (DEBUG_PRINTPOS) Console.WriteLine($"Floor position: ({X:F2}, {Y:F2})");
 
