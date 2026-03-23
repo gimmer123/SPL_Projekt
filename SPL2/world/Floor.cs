@@ -15,9 +15,7 @@ namespace SPL2.World;
 public class Floor
 {
     private float _NoiseScale = 0.25f; // guess around with this value till we find something good
-    private float Speed = 100f; // pixels per second
-
-
+    
     // FRACTAL NOISE PARAMS
     private static float FN_FREQUENCY_MULTIPLIER = 2f;
     private static float FN_AMPLITUDE_MULTIPLIER = 0.5f;
@@ -41,8 +39,6 @@ public class Floor
     private int lastTileX;
     private int lastTileY;
 
-    // random
-    private Random _random;
     public long Seed { get; private set; }
 
     // test stuff
@@ -53,7 +49,6 @@ public class Floor
     public Floor(Tileset tileset, int TileWidthCount, int TileHeightCount)
     {
         Seed = DateTime.Now.Ticks % 1000000000000; // create a seed based on current time. mod to keep in reasonable range for bitshift later
-        _random = new Random((int)Seed);
         Tilemap = new Tilemap(tileset, TileWidthCount, TileHeightCount);
         Generate();
     }
