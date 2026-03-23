@@ -220,7 +220,7 @@ public class Floor
     private static double LerpDouble(double a, double b, double t)
     {
         // lerp but double
-        return a + ((b - a) * t);
+        return a + t * (b - a);
     }
 
     private static float Gradient(int seed, int x, int y, float dx, float dy)
