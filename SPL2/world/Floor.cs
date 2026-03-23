@@ -93,6 +93,14 @@ public class Floor
         X = LerpDouble(X, _targetX, t);
         Y = LerpDouble(Y, _targetY, t);
 
+        double deltaX = X - oldX;
+        double deltaY = Y - oldY;
+
+        if (deltaX == 0 && deltaY == 0)
+        {
+            return; // no movement, no need to update
+        }
+
         OnMove?.Invoke(X - oldX, Y - oldY);
 
         int currentTileX = (int)(X / Tilemap.TileWidth);
