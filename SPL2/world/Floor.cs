@@ -52,6 +52,8 @@ public class Floor
     // this fixes part of the jitter issues that now only appear around 0/0 
     private double _targetX;
     private double _targetY;
+
+    public Action<double, double> OnMove;
     private int lastTileX;
     private int lastTileY;
 
@@ -84,9 +86,14 @@ public class Floor
         // take movement smoothness into account when moving 
         double t = 1f - Math.Exp(-MOVE_SMOOTHNESS * gameTime.ElapsedGameTime.TotalSeconds);
 
+        double oldX = X;
+        double oldY = Y;
+
         // smoothly lerp towards the target position.
         X = LerpDouble(X, _targetX, t);
         Y = LerpDouble(Y, _targetY, t);
+
+        OnMove?.Invoke(X - oldX, Y - oldY);
 
         int currentTileX = (int)(X / Tilemap.TileWidth);
         int currentTileY = (int)(Y / Tilemap.TileHeight);

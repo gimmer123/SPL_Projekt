@@ -23,6 +23,8 @@ public class Projectile : IEntity
         Position = new(origin.Position.X, origin.Position.Y);
         _spawnTime = gameTime.ElapsedGameTime.Seconds;
         _sprite = sprite;
+        _playState = playState;
+        _playState.Floor.OnMove += FloorMovement; 
     }
 
     public void Update(GameTime gameTime)
@@ -39,4 +41,10 @@ public class Projectile : IEntity
     {
         _sprite.Draw(spriteBatch, Position);
     }
+
+    private void FloorMovement(double x, double y)
+    {
+        Position = new Vector2(Position.X - (float)x, Position.Y - (float)y);
+    }
+
 }
