@@ -13,6 +13,15 @@ namespace SPL2.World;
 // also, make it not skip entire tiles when moving, make each tile float offset so we can move ie. half a tile
 
 // there's a ton of improvements available in this code, in terms of performance, readability, features, generation, etc. just a basic implementation for now
+public enum TileTexture
+{
+    Grass = 0,
+    Dirt = 1,
+    Sand = 2,
+    Path = 3
+}
+
+
 public class Floor
 {
     private float _NoiseScale = 0.25f; // guess around with this value till we find something good
@@ -35,8 +44,12 @@ public class Floor
     public TextureRegion Background { get; private set; }
 
     // location
-    public double X { get; private set; }
+    public double X { get; private set; } 
     public double Y { get; private set; }
+
+    // using target X/Y lets us set an away position and not instantly snap every movement
+    // WARNING: this might cause issues later if we have entities that have to be moved based on the floor since it doesnt instantly update
+    // this fixes part of the jitter issues that now only appear around 0/0 
     private double _targetX;
     private double _targetY;
     private int lastTileX;
@@ -44,7 +57,6 @@ public class Floor
 
     // smooth tilemap movement, more magic values
     private const float MOVE_SMOOTHNESS = 14f;
-    private const double TARGET_EPSILON = 0.001;
 
     public long Seed { get; private set; }
 
@@ -57,6 +69,11 @@ public class Floor
     {
         Seed = DateTime.Now.Ticks % 1000000000000; // create a seed based on current time. mod to keep in reasonable range for bitshift later
         Tilemap = new Tilemap(tileset, TileWidthCount, TileHeightCount);
+
+        // temp offset to avoid jittering around 0/0 will find a proper fix later
+        X = 100000;
+        Y = 100000;
+
         _targetX = X;
         _targetY = Y;
         Generate();
@@ -64,25 +81,17 @@ public class Floor
 
     public void Update(GameTime gameTime) 
     {
-        float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
         // take movement smoothness into account when moving 
-        double t = 1f - Math.Exp(-MOVE_SMOOTHNESS * deltaSeconds);
+        double t = 1f - Math.Exp(-MOVE_SMOOTHNESS * gameTime.ElapsedGameTime.TotalSeconds);
 
+        // smoothly lerp towards the target position.
         X = LerpDouble(X, _targetX, t);
         Y = LerpDouble(Y, _targetY, t);
-
-
-        if (Math.Abs(_targetX - X) < TARGET_EPSILON)
-            X = _targetX;
-
-        if (Math.Abs(_targetY - Y) < TARGET_EPSILON)
-            Y = _targetY;
 
         int currentTileX = (int)(X / Tilemap.TileWidth);
         int currentTileY = (int)(Y / Tilemap.TileHeight);
 
-        if (DEBUG_PRINTPOS) Console.WriteLine($"Player position: ({X:F2}, {Y:F2})");
+        if (DEBUG_PRINTPOS) Console.WriteLine($"Floor position: ({X:F2}, {Y:F2})");
 
         if (lastTileX == currentTileX && lastTileY == currentTileY)
         {
@@ -128,10 +137,10 @@ public class Floor
                 if (DEBUG_PRINTTILE) Console.WriteLine($"Tile ({x},{y}): noise={noise:F2}, t={t:F2}");
 
                 // Mostly grass, variants in patches where t is high
-                if     (t < GRASS_THRESHOLD) tileIndex = 0; // grass
-                else if (t < DIRT_THRESHOLD) tileIndex = 1; // dirt
-                else if (t < SAND_THRESHOLD) tileIndex = 2; // sand
-                else                         tileIndex = 3; // path
+                if     (t < GRASS_THRESHOLD) tileIndex = (int)TileTexture.Grass; 
+                else if (t < DIRT_THRESHOLD) tileIndex = (int)TileTexture.Dirt; 
+                else if (t < SAND_THRESHOLD) tileIndex = (int)TileTexture.Sand; 
+                else                         tileIndex = (int)TileTexture.Path; 
 
                 Tilemap.SetTile(x, y, new Tile(tileIndex));
             }
