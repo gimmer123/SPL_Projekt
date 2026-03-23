@@ -3,6 +3,7 @@ using System.Data;
 using GMDCore;
 using GMDCore.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 namespace SPL2.World;
 
@@ -36,8 +37,14 @@ public class Floor
     // location
     public double X { get; private set; }
     public double Y { get; private set; }
+    private double _targetX;
+    private double _targetY;
     private int lastTileX;
     private int lastTileY;
+
+    // smooth tilemap movement, more magic values
+    private const float MOVE_SMOOTHNESS = 14f;
+    private const double TARGET_EPSILON = 0.001;
 
     public long Seed { get; private set; }
 
@@ -50,11 +57,28 @@ public class Floor
     {
         Seed = DateTime.Now.Ticks % 1000000000000; // create a seed based on current time. mod to keep in reasonable range for bitshift later
         Tilemap = new Tilemap(tileset, TileWidthCount, TileHeightCount);
+        _targetX = X;
+        _targetY = Y;
         Generate();
     }
 
     public void Update(GameTime gameTime) 
     {
+        float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+        // take movement smoothness into account when moving 
+        double t = 1f - Math.Exp(-MOVE_SMOOTHNESS * deltaSeconds);
+
+        X = LerpDouble(X, _targetX, t);
+        Y = LerpDouble(Y, _targetY, t);
+
+
+        if (Math.Abs(_targetX - X) < TARGET_EPSILON)
+            X = _targetX;
+
+        if (Math.Abs(_targetY - Y) < TARGET_EPSILON)
+            Y = _targetY;
+
         int currentTileX = (int)(X / Tilemap.TileWidth);
         int currentTileY = (int)(Y / Tilemap.TileHeight);
 
@@ -67,7 +91,8 @@ public class Floor
         lastTileX = currentTileX;
         lastTileY = currentTileY;
         GenerateTilemap(); //regen tilemap after movement (improve this please, this is very inefficient)
-        // TODO: performance improvements, only generate new edge tiles and keep rest in memory
+        // TODO: performance improvements, only generate new edge tiles and keep rest in memory (this is barely needed, this entire thing generates in like sub-1ms already)
+
     }
 
     public void Generate()
@@ -113,14 +138,34 @@ public class Floor
         }
     }
 
+
+    // TODO: Make sure MoveX and MoveY also interacts with entities
+    // currently if the player is leftbound and moving -x the player will freeze and move the floor.
+    // other entities wont freeze though, this will make them look like they "sped up" and in reality, its just cause they're immune to the floor moving
     public void MoveX(double delta)
     {
-        X += delta;
+        _targetX += delta;
     }
 
     public void MoveY(double delta)
     {
-        Y += delta;
+        _targetY += delta;
+    }
+
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        Tilemap.Draw(spriteBatch, GetRenderOffset());
+    }
+
+    private Vector2 GetRenderOffset()
+    {
+        double tileWidth = Tilemap.TileWidth;
+        double tileHeight = Tilemap.TileHeight;
+
+        double offsetX = X - (Math.Floor(X / tileWidth) * tileWidth);
+        double offsetY = Y - (Math.Floor(Y / tileHeight) * tileHeight);
+
+        return new Vector2(-(float)offsetX, -(float)offsetY);
     }
 
     private static float PerlinNoise2D(float x, float y, long seed)
@@ -154,6 +199,12 @@ public class Floor
     {
         // linear interpolation function, same as math.lerp in unity basically
         return a + t * (b - a);
+    }
+
+    private static double LerpDouble(double a, double b, double t)
+    {
+        // lerp but double
+        return a + ((b - a) * t);
     }
 
     private static float Gradient(int seed, int x, int y, float dx, float dy)

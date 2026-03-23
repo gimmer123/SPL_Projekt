@@ -17,7 +17,6 @@ public class MoveRightCommand : ICommand
             float overflow = newPositionX - MAX_X;
             newPositionX = MAX_X;
             playState.Floor.MoveX(overflow);
-            playState.Floor.Update(gameTime);
         }
 
         entity.Position = new(newPositionX, entity.Position.Y); 

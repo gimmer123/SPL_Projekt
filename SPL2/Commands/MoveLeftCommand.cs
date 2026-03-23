@@ -16,7 +16,6 @@ namespace SPL2.Commands;
             float overflow = newPositionX - MIN_X;
             newPositionX = MIN_X;
             playState.Floor.MoveX(overflow);
-            playState.Floor.Update(gameTime);
         }
         entity.Position = new(newPositionX, entity.Position.Y);
     } 

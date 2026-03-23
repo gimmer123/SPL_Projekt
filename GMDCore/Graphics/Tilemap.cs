@@ -25,8 +25,8 @@ public class Tilemap
     {
         Tileset = tileset;
         Topperset = topperset;
-        Rows = rows;
-        Columns = columns;
+        Rows = rows + 1;
+        Columns = columns + 1;
         Count = Columns * Rows;
         Scale = Vector2.One;
         _tiles = new Tile[Count];
@@ -91,6 +91,11 @@ public class Tilemap
 
     public void Draw(SpriteBatch spriteBatch)
     {
+        Draw(spriteBatch, Vector2.Zero);
+    }
+
+    public void Draw(SpriteBatch spriteBatch, Vector2 offset)
+    {
         for (int i = 0; i < Count; i++)
         {
             Tile tileData = _tiles[i];
@@ -99,6 +104,7 @@ public class Tilemap
             int y = i / Columns;
 
             Vector2 position = new(x * TileWidth, y * TileHeight);
+            position += offset;
 
             // Draw base tile
             if (tileData.GraphicId >= 0 && Tileset != null)

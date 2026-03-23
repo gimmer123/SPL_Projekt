@@ -16,7 +16,6 @@ public class MoveUpCommand : ICommand
             float overflow = newPositionY - MIN_Y;
             newPositionY = MIN_Y;
             playState.Floor.MoveY(overflow);
-            playState.Floor.Update(gameTime);
         }
 
         entity.Position = new(entity.Position.X, newPositionY); 

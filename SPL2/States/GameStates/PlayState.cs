@@ -42,6 +42,8 @@ public class PlayState(Game1 game) : GameStateBase(game)
 
     public override void Update(GameTime gameTime)
     {
+        Floor.Update(gameTime);
+
         foreach (IEntity entity in PendingAdd)
         {
             Entities.Add(entity);
@@ -54,7 +56,7 @@ public class PlayState(Game1 game) : GameStateBase(game)
     public override void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Begin(transformMatrix: Game.ScreenScaleMatrix, samplerState: SamplerState.PointClamp);
-        Floor.Tilemap.Draw(spriteBatch);
+        Floor.Draw(spriteBatch);
         Entities.ForEach (entity => entity.Draw(spriteBatch));
         spriteBatch.End();
     }
