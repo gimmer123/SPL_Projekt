@@ -14,7 +14,7 @@ namespace SPL2.States.GameStates;
 
 public class PlayState(Game1 game) : GameStateBase(game)
 {
-    private Player _player;
+    public Player _player { get; private set; }
     public Floor Floor;
     public List<IEntity> Entities = new();
     public List<IEntity> PendingAdd= new();

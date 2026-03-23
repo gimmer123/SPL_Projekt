@@ -22,7 +22,7 @@ public class Player : IEntity
 
     public bool Remove {get; set;} = false;
 
-    private ICommand _wKey, _aKey, _sKey, _dKey, _upKey, _downKey, _leftKey, _rightKey;
+    private ICommand _wKey, _aKey, _sKey, _dKey, _spaceKey;
     
     private Sprite _sprite;
     private PlayState _playState;
@@ -34,10 +34,9 @@ public class Player : IEntity
         _sKey = new MoveDownCommand();
         _aKey = new MoveLeftCommand();
         _dKey = new MoveRightCommand();
-        _upKey = new ShootUpCommand();
-        _downKey = new ShootDownCommand();
-        _leftKey = new ShootLeftCommand();
-        _rightKey = new ShootRightCommand();
+
+        _spaceKey = new ShootCommand();
+        
         _playState = playState;
     }
 
@@ -52,10 +51,7 @@ public class Player : IEntity
         bool isSKeyDown = Core.Input.Keyboard.CurrentState.IsKeyDown(Keys.S);
         bool isAKeyDown = Core.Input.Keyboard.CurrentState.IsKeyDown(Keys.A);
         bool isDKeyDown = Core.Input.Keyboard.CurrentState.IsKeyDown(Keys.D);
-        bool wasUpKeyPressed = Core.Input.Keyboard.WasKeyJustPressed(Keys.Up);
-        bool wasDownKeyPressed = Core.Input.Keyboard.WasKeyJustPressed(Keys.Down);
-        bool wasLeftKeyPressed = Core.Input.Keyboard.WasKeyJustPressed(Keys.Left);
-        bool wasRightKeyPressed = Core.Input.Keyboard.WasKeyJustPressed(Keys.Right);
+        bool wasspacePressed = Core.Input.Keyboard.WasKeyJustPressed(Keys.Space);
             
         
         if (isWKeyDown)
@@ -79,26 +75,11 @@ public class Player : IEntity
             _dKey.Execute(this, gameTime, _playState);
         }
 
-        if (wasUpKeyPressed)
+        if (wasspacePressed)
         {
-            _upKey.Execute(this, gameTime, _playState);
+            _spaceKey.Execute(this, gameTime, _playState);
         }
         
-
-        if (wasDownKeyPressed)
-        {
-            _downKey.Execute(this, gameTime, _playState);
-        }
-
-        if (wasLeftKeyPressed)
-        {
-            _leftKey.Execute(this, gameTime, _playState);
-        }
-
-        if (wasRightKeyPressed)
-        {
-            _rightKey.Execute(this, gameTime, _playState);
-        }
     }
 
     public void Draw(SpriteBatch spriteBatch)

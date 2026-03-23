@@ -7,7 +7,7 @@ namespace SPL2.States.GameStates;
 
 public abstract class GameStateBase(Game1 game)
 {
-    protected Game1 Game { get; } = game;
+    public Game1 Game { get; private set; } = game;
 
     public virtual void Enter() { }
     public virtual void Exit() { }

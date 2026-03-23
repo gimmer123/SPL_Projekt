@@ -10,14 +10,14 @@ public class Projectile : IEntity
 {
     public Vector2 Position {get; set;}
     public float Speed => 60;
-    private ICommand _direction;
+    private Vector2 _direction;
     private Sprite _sprite;
     private PlayState _playState;
     public bool Remove {get; set;} = false;
     private float _duration => 4;
     private float _spawnTime;
 
-    public Projectile(Sprite sprite, ICommand direction, IEntity origin, PlayState playState, GameTime gameTime)
+    public Projectile(Sprite sprite, Vector2 direction, IEntity origin, PlayState playState, GameTime gameTime)
     {
         _direction = direction;
         Position = new(origin.Position.X, origin.Position.Y);
@@ -27,7 +27,7 @@ public class Projectile : IEntity
 
     public void Update(GameTime gameTime)
     {
-        _direction.Execute(this, gameTime, _playState);
+        Position += _direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         if (_spawnTime - gameTime.ElapsedGameTime.TotalSeconds >= _duration)
         {
