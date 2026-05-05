@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using SPL2.Commands;
 using SPL2.World;
 using SPL2.Entities;
+using SPL2.EnemySpawner;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 
@@ -17,12 +18,14 @@ public class PlayState(Game1 game) : GameStateBase(game)
     public Player _player { get; private set; }
     public Floor Floor;
     public List<IEntity> Entities = new();
-    public List<IEntity> PendingAdd= new();
+    public List<IEntity> PendingAdd = new();
+    public Spawner Spawner;
 
     public Sprite ProjectileSprite;
 
     public override void Enter()
     {
+        Spawner = new Spawner(this);
         TextureAtlas atlas = TextureAtlas.FromFile(Game.Content, "images/atlas-definitions.xml");
 
         // load floor tileset from atlas region
@@ -43,6 +46,7 @@ public class PlayState(Game1 game) : GameStateBase(game)
     public override void Update(GameTime gameTime)
     {
         Floor.Update(gameTime);
+        Spawner.Update(gameTime);
 
         foreach (IEntity entity in PendingAdd)
         {
