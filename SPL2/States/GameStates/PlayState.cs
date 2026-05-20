@@ -10,17 +10,20 @@ using SPL2.Entities;
 using SPL2.EnemySpawner;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
+using GMDCore;
+using System.Security.Cryptography.X509Certificates;
+using System.Diagnostics;
 
 namespace SPL2.States.GameStates;
 
 public class PlayState(Game1 game) : GameStateBase(game)
 {
-    public Player _player { get; private set; }
+    public Player Player { get; private set; }
     public Floor Floor;
     public List<IEntity> Entities = new();
     public List<IEntity> PendingAdd = new();
     public Spawner Spawner;
-
+    public Color PlayerColor;
     public Sprite ProjectileSprite;
 
     public override void Enter()
@@ -38,9 +41,10 @@ public class PlayState(Game1 game) : GameStateBase(game)
         Floor = new Floor(floorTileset, columns, rows);
 
         Sprite playerSprite = atlas.CreateSprite("snake");
+        PlayerColor = playerSprite.Color;
         ProjectileSprite = playerSprite;
-        _player = new Player(playerSprite, this);
-        Entities.Add(_player);
+        Player = new Player(playerSprite, this);
+        Entities.Add(Player);
     }
 
     public override void Update(GameTime gameTime)
@@ -63,5 +67,21 @@ public class PlayState(Game1 game) : GameStateBase(game)
         Floor.Draw(spriteBatch);
         Entities.ForEach (entity => entity.Draw(spriteBatch));
         spriteBatch.End();
+    }
+
+    public bool IntersectsEnemy(Circle collider, out List<BaseEnemy> enemies)
+    {
+        bool hasIntersected = false;
+        enemies = [];
+        foreach (IEntity entity in Entities)
+        {
+            if (entity is BaseEnemy enemy && collider.Intersects(entity.Collider))
+            {
+                enemies.Add(enemy);
+                hasIntersected = true;
+            }
+        }
+
+        return hasIntersected;
     }
 }

@@ -16,7 +16,7 @@ public abstract class BaseEnemy : IEntity
     public Vector2 Position {get; set;}
     public float Speed => 20;
     public bool Remove {get; set;} = false;
-
+    public Circle Collider {get; set;}
     protected Sprite _sprite;
     protected PlayState _playState;
     
@@ -26,6 +26,7 @@ public abstract class BaseEnemy : IEntity
         _sprite.CenterOrigin();
         _playState = playState;
         _playState.Floor.OnMove += FloorMovement; 
+        Collider = new Circle(new Point((int)Position.X, (int)Position.Y), (int)_sprite.Height / 2);
     }
     
     public abstract void Update(GameTime gameTime);
@@ -33,6 +34,7 @@ public abstract class BaseEnemy : IEntity
     public void Draw(SpriteBatch spriteBatch)
     {
         _sprite.Draw(spriteBatch, Position);
+        Collider = new Circle(new Point((int)Position.X, (int)Position.Y), (int)_sprite.Height / 2);
     }
 
     private void FloorMovement(double x, double y)
@@ -52,7 +54,7 @@ public abstract class BaseEnemy : IEntity
 
     protected Vector2 DirectionToPlayer()
     {
-        Vector2 direction = _playState._player.Position - Position;
+        Vector2 direction = _playState.Player.Position - Position;
         if (direction != Vector2.Zero)
         {
             direction.Normalize();
@@ -61,7 +63,12 @@ public abstract class BaseEnemy : IEntity
     }
     protected double DistanceToPlayer()
     {
-        return Vector2.Distance(Position, _playState._player.Position);
+        return Vector2.Distance(Position, _playState.Player.Position);
     }
     protected abstract void Attack();
+
+    public void TakeDamage()
+    {
+        
+    }
 }

@@ -26,6 +26,7 @@ public class Player : IEntity
     
     private Sprite _sprite;
     private PlayState _playState;
+    public Circle Collider {get; set;}
     public Player(Sprite sprite, PlayState playState)
     {
         _sprite = sprite;
@@ -38,11 +39,14 @@ public class Player : IEntity
         _spaceKey = new ShootCommand();
         
         _playState = playState;
+
+        Collider = new Circle(new Point((int)Position.X, (int)Position.Y), (int)_sprite.Height / 2);
     }
 
     public void Update(GameTime gameTime)
     {
         HandleInput(gameTime);
+        Collider = new Circle(new Point((int)Position.X, (int)Position.Y), (int)_sprite.Height / 2);
     }
 
     private void HandleInput(GameTime gameTime)
@@ -84,7 +88,13 @@ public class Player : IEntity
 
     public void Draw(SpriteBatch spriteBatch)
     {
+        _sprite.Color = _playState.PlayerColor;
         _sprite.Draw(spriteBatch, Position);
+    }
+
+    public void TakeDamage()
+    {
+        
     }
 
 }

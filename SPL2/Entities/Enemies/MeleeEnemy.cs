@@ -16,6 +16,7 @@ public class MeleeEnemy : BaseEnemy
     private float _attackRange = 10;
     public MeleeEnemy(Sprite sprite, PlayState playState) : base(sprite, playState)
     {
+        sprite.Color = Color.Green;
     }
 
     public override void Update(GameTime gameTime)

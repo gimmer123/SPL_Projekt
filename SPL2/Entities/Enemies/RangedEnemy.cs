@@ -16,6 +16,7 @@ public class RangedEnemy : BaseEnemy
     private float _attackRange = 50;
     public RangedEnemy(Sprite sprite, PlayState playState) : base(sprite, playState)
     {
+        sprite.Color = Color.Turquoise;
     }
 
     public override void Update(GameTime gameTime)

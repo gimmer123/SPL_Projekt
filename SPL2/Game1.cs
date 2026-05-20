@@ -1,4 +1,6 @@
-﻿using GMDCore;
+﻿using System;
+using System.Diagnostics;
+using GMDCore;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SPL2.States.GameStates;
@@ -25,6 +27,7 @@ public class Game1 : Core
 
     protected override void LoadContent()
     {
+        Console.WriteLine("Hello");
     }
 
     protected override void Update(GameTime gameTime)

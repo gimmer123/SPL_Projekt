@@ -2,6 +2,7 @@ using System;
 using GMDCore;
 using Microsoft.Xna.Framework;
 using SPL2.Entities;
+using SPL2.Projectile.PlayerProjectile;
 using SPL2.States.GameStates;
 
 namespace SPL2.Commands;
@@ -16,6 +17,6 @@ public class ShootCommand : ICommand
 
         Vector2 direction = Vector2.Normalize(mousePosition - playerPosition);
 
-        playState.PendingAdd.Add(new Projectile(playState.ProjectileSprite, direction, entity, playState, gameTime));
+        playState.PendingAdd.Add(new PlayerProjectile(playState.ProjectileSprite, direction, entity, playState, gameTime));
     }
 }
