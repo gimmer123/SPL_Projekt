@@ -65,7 +65,7 @@ public abstract class BaseEnemy : IEntity
     {
         return Vector2.Distance(Position, _playState.Player.Position);
     }
-    protected abstract void Attack();
+    protected abstract void Attack(GameTime gameTime);
 
     public void TakeDamage()
     {

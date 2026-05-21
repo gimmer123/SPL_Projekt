@@ -7,7 +7,7 @@ using SPL2.States.GameStates;
 
 namespace SPL2.Commands;
 
-public class ShootCommand : ICommand
+public class PlayerShootCommand : ICommand
 {
     public void Execute(IEntity entity, GameTime gameTime, PlayState playState)
     {

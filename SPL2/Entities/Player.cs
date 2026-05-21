@@ -36,7 +36,7 @@ public class Player : IEntity
         _aKey = new MoveLeftCommand();
         _dKey = new MoveRightCommand();
 
-        _spaceKey = new ShootCommand();
+        _spaceKey = new PlayerShootCommand();
         
         _playState = playState;
 
