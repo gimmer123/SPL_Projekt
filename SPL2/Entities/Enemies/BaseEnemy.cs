@@ -77,6 +77,7 @@ public abstract class BaseEnemy : IEntity
         if (Health <= 0)
         {
             Remove = true;
+            _playState.Spawner.EnemyRemoved();
         }
     }
 }

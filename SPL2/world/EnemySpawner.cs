@@ -14,11 +14,11 @@ namespace SPL2.EnemySpawner;
 
 public class Spawner
 {
-    private float _spawnInterval = 3f;
+    private float _spawnInterval = 2f;
     private float _lastSpawnTime = 0f;
     private PlayState _playState;
 
-    private int MaxEnemies = 10;
+    private int MaxEnemies = 25;
     private int CurrentEnemies = 0;
     private Random _random = new Random();
     public Spawner(PlayState playState)
