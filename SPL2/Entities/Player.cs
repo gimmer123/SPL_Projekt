@@ -20,6 +20,9 @@ public class Player : IEntity
 
     public float Speed => 40;
 
+    public int Health { get; private set; }
+    public int MaxHealth { get; private set; }
+
     public bool Remove {get; set;} = false;
 
     private ICommand _wKey, _aKey, _sKey, _dKey, _spaceKey;
@@ -39,6 +42,9 @@ public class Player : IEntity
         _spaceKey = new PlayerShootCommand();
         
         _playState = playState;
+
+        MaxHealth = 5;
+        Health = MaxHealth;
 
         Collider = new Circle(new Point((int)Position.X, (int)Position.Y), (int)_sprite.Height / 2);
     }
@@ -94,7 +100,11 @@ public class Player : IEntity
 
     public void TakeDamage()
     {
-        
+        Health--;
+        if (Health <= 0)
+        {
+            Remove = true;
+        }
     }
 
 }

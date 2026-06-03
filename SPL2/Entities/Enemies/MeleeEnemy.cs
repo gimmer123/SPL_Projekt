@@ -21,6 +21,8 @@ public class MeleeEnemy : BaseEnemy
     public MeleeEnemy(Sprite sprite, PlayState playState) : base(sprite, playState)
     {
         sprite.Color = Color.Green;
+        MaxHealth = 5;
+        Health = MaxHealth;
         
     }
 

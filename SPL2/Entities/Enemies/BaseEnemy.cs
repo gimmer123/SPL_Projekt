@@ -17,6 +17,8 @@ public abstract class BaseEnemy : IEntity
     public float Speed => 20;
     public bool Remove {get; set;} = false;
     public Circle Collider {get; set;}
+    public int Health { get; protected set; }
+    public int MaxHealth { get; protected set; } = 3;
     protected Sprite _sprite;
     protected PlayState _playState;
     
@@ -27,6 +29,8 @@ public abstract class BaseEnemy : IEntity
         _playState = playState;
         _playState.Floor.OnMove += FloorMovement; 
         Collider = new Circle(new Point((int)Position.X, (int)Position.Y), (int)_sprite.Height / 2);
+
+        Health = MaxHealth;
     }
     
     public abstract void Update(GameTime gameTime);
@@ -69,6 +73,10 @@ public abstract class BaseEnemy : IEntity
 
     public void TakeDamage()
     {
-        
+        Health--;
+        if (Health <= 0)
+        {
+            Remove = true;
+        }
     }
 }
